@@ -44,3 +44,17 @@ next-env.d.ts
 Build_steps.md
 .vscode
 .vscode/*
+# InsForge & AI agent skills
+.insforge
+.agent
+.agents
+.augment
+.claude
+.cline
+.github/copilot*
+.kilocode
+.qoder
+.qwen
+.roo
+.trae
+.windsurf
