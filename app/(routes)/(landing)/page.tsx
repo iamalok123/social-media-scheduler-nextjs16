@@ -1,6 +1,5 @@
 "use client"
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
 import Logo from "@/components/logo";
 import { useAuth, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
@@ -29,7 +28,7 @@ export default function Home() {
               ) : (
                 <>
                   <Button asChild variant="default" className="rounded-full px-5">
-                    <Link href="/dashboard">Open Dashboard</Link>
+                    <Link href="/ideas">Open Dashboard</Link>
                   </Button>
                   <UserButton
                     appearance={{
