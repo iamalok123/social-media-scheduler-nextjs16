@@ -113,67 +113,82 @@ function ChannelTabContent() {
                 <div className="space-y-3">
                     {isPending
                         ? Array.from({ length: 6 }).map((_, index) => (
-                            <div
-                                key={index}
-                                className="flex items-center justify-between rounded-xl border p-4"
-                            >
-                                <div className="flex items-center gap-3">
-                                    <Skeleton className="size-6 rounded-sm bg-secondary" />
-                                    <Skeleton className="h-5 w-24 bg-secondary" />
-                                </div>
-                                <Skeleton className="h-8 w-20 bg-secondary" />
-                            </div>
-                        ))
-                        : channels?.map((channel) => {
-                            const icon = getChannelIcon(channel.type);
-                            return (
-                                <div
-                                    key={channel.id}
+                              <div
+                                    key={index}
                                     className="flex items-center justify-between rounded-xl border p-4"
                                 >
-                                    <div className="flex items-center gap-3">
-                                        <span className="relative">
-                                            {icon ? (
-                                                <HugeiconsIcon
-                                                    icon={icon}
-                                                    color="currentColor"
-                                                    className=" text-white! size-6! p-1 rounded-sm"
-                                                    style={{ background:channel.color}}
-                                                />
-                                            ) : null}
+                                  <div className="flex items-center gap-3">
+                                        <Skeleton className="size-6 rounded-sm bg-secondary" />
+                                        <Skeleton className="h-5 w-24 bg-secondary" />
+                                  </div>
+                                  <Skeleton className="h-8 w-20 bg-secondary" />
+                              </div>
+                          ))
+                        : channels?.map((channel) => {
+                              const icon = getChannelIcon(channel.type);
+                              return (
+                                  <div
+                                      key={channel.id}
+                                      className="flex items-center justify-between rounded-xl border p-4"
+                                  >
+                                      <div className="flex items-center gap-3">
+                                          <span className="relative">
+                                              {icon ? (
+                                                  <HugeiconsIcon
+                                                      icon={icon}
+                                                      color="currentColor"
+                                                      className=" text-white! size-6! p-1 rounded-sm"
+                                                      style={{
+                                                          background:
+                                                              channel.color,
+                                                      }}
+                                                  />
+                                              ) : null}
 
-                                            <div
-                                                className={cn(
-                                                    `absolute -right-1 bottom-0 p-0.5 bg-white dark:bg-background rounded-xs`,
-                                                    {
-                                                        "bg-transparent p-0 rounded-full -bottom-1 -right-0.5": channel.connected,
-                                                    },
-                                                )}
-                                            >
-                                                {channel.connected ? (
-                                                    <div className="size-2.5 bg-primary rounded-full" />
-                                                ) : (
-                                                    <HugeiconsIcon
-                                                        icon={PlusSignIcon}
-                                                        className="size-2!"
-                                                    />
-                                                )}
-                                            </div>
-                                        </span>
+                                              <div
+                                                  className={cn(
+                                                      `absolute -right-1 bottom-0 p-0.5 bg-white dark:bg-background rounded-xs`,
+                                                      {
+                                                          "bg-transparent p-0 rounded-full -bottom-1 -right-0.5":
+                                                              channel.connected,
+                                                      },
+                                                  )}
+                                              >
+                                                  {channel.connected ? (
+                                                      <div className="size-2.5 bg-primary rounded-full" />
+                                                  ) : (
+                                                      <HugeiconsIcon
+                                                          icon={PlusSignIcon}
+                                                          className="size-2!"
+                                                      />
+                                                  )}
+                                              </div>
+                                          </span>
 
-                                        <span className="font-medium">
-                                            {channel.name}
-                                        </span>
-                                    </div>
+                                          <span className="font-medium">
+                                              {channel.name}
+                                          </span>
+                                      </div>
 
-                                    <Button
-                                        variant={ channel.connected ? "destructive": "default" }
-                                        size="sm"
-                                        disabled={ connectMutation.isPending || disconnectMutation.isPending}
-                                        onClick={() => channel.connected ? handleDisconnect( channel.user_channel_id! )
-                                            : handleConnect(channel.id!)
-                                        }
-                                    >
+                                      <Button
+                                          variant={
+                                              channel.connected
+                                                  ? "destructive"
+                                                  : "default"
+                                          }
+                                          size="sm"
+                                          disabled={
+                                              connectMutation.isPending ||
+                                              disconnectMutation.isPending
+                                          }
+                                          onClick={() =>
+                                              channel.connected
+                                                  ? handleDisconnect(
+                                                        channel.user_channel_id!,
+                                                    )
+                                                  : handleConnect(channel.id!)
+                                          }
+                                      >
                                           {((connectMutation.isPending &&
                                               connectMutation.variables ===
                                                   channel.id) ||

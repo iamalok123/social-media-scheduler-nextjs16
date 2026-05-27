@@ -1,5 +1,6 @@
 "use client";
 
+import { useSyncExternalStore } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -28,14 +29,17 @@ import {
 import { cn } from "@/lib/utils";
 import Logo from "@/components/logo";
 import { Button } from "@/components/ui/button";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ChannelType } from "@/types/channel.type";
 import { PlusSignIcon } from "@hugeicons/core-free-icons";
 import { getChannelIcon, getChannelUrl } from "@/constants/channels";
 import ChannelAvatar from "@/components/channel-avatar";
 import { UserButton } from "@clerk/nextjs";
+import { toast } from "sonner";
 // import CreatePostDialog from "@/components/schedule/create-post-dialog";
+
+
 
 const mainNav = [
     { name: "Ideas", href: "/ideas", icon: Lightbulb },
@@ -44,10 +48,44 @@ const mainNav = [
     { name: "Settings", href: "/settings", icon: Settings },
 ];
 
+const subscribeToClientReady = () => () => {};
+const getClientSnapshot = () => true;
+const getServerSnapshot = () => false;
+
 const AppSidebar = () => {
     const pathname = usePathname();
     const { state } = useSidebar();
     const isCollapsed = state === "collapsed";
+    const isMounted = useSyncExternalStore(
+        subscribeToClientReady,
+        getClientSnapshot,
+        getServerSnapshot,
+    );
+
+
+    const connectMutation = useMutation({
+        mutationFn: async (channelTypeId: string) => {
+            const res = await fetch("/api/channel/connect", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    channelTypeId,
+                }),
+            });
+            const data = await res.json();
+            if (!res.ok) {
+                throw new Error(data.error || "Failed to connect channel");
+            }
+            return data;
+        },
+        onSuccess: ({ url }) => {
+            window.location.href = url;
+        },
+        onError: () => {
+            toast.error("Failed to connect channel");
+        },
+    });
+
 
     const { data: channelsData, isPending } = useQuery({
         queryKey: ["channels"],
@@ -73,10 +111,11 @@ const AppSidebar = () => {
     const totalChannels = channelsData?.totalChannels || 0;
     const limitedChannels = unconnectedChannels.slice(0, 4);
 
-    //   const handleConnect = (channelTypeId: string) => {
-    //       if(connectMutation.isPending) return;
-    //       connectMutation.mutate(channelTypeId);
-    //   }
+    
+    const handleConnect = (channelTypeId: string) => {
+        if (connectMutation.isPending) return;
+        connectMutation.mutate(channelTypeId);
+    };
 
     return (
         <>
@@ -224,8 +263,8 @@ const AppSidebar = () => {
                                                         >
                                                             <button
                                                                 className="w-full flex items-center gap-2"
-                                                                // disabled={connectMutation.isPending}
-                                                                // onClick={() => handleConnect(channel.id)}
+                                                                disabled={connectMutation.isPending}
+                                                                onClick={() => handleConnect(channel.id)}
                                                             >
                                                                 <span>
                                                                     <div className="relative">
@@ -299,14 +338,21 @@ const AppSidebar = () => {
                         </span>
                     </div>
                     <div className="flex items-center gap-2">
-                        <UserButton
-                            showName={false}
-                            appearance={{
-                                elements: {
-                                    avatarBox: "h-8 w-8",
-                                },
-                            }}
-                        />
+                        {isMounted ? (
+                            <UserButton
+                                showName={!isCollapsed}
+                                appearance={{
+                                    elements: {
+                                        avatarBox: "h-8 w-8",
+                                    },
+                                }}
+                            />
+                        ) : (
+                            <div
+                                className="h-8 w-8 rounded-full bg-muted"
+                                aria-hidden="true"
+                            />
+                        )}
                         {/* <span className="text-sm">
                             {user?.fullName ||
                                 user?.primaryEmailAddress?.emailAddress}
