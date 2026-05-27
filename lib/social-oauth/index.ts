@@ -21,6 +21,41 @@ function getConfig(type: ChannelTypeEnum) {
     };
 }
 
+function normalizeString(value: unknown) {
+    return typeof value === "string" && value.trim() ? value.trim() : null;
+}
+
+function normalizeHandle(value: unknown) {
+    return normalizeString(value)?.replace(/^@/, "") ?? null;
+}
+
+function buildProfileUrl(
+    type: ChannelTypeEnum,
+    profileData: Record<string, unknown>,
+    handle: string | null,
+) {
+    const directUrl =
+        normalizeString(profileData.profile_url) ??
+        normalizeString(profileData.profileUrl) ??
+        normalizeString(profileData.public_profile_url) ??
+        normalizeString(profileData.publicProfileUrl);
+
+    if (directUrl?.startsWith("http")) return directUrl;
+
+    if (type === ChannelTypeEnum.LINKEDIN) {
+        const vanityName = normalizeHandle(profileData.vanityName);
+        return vanityName
+            ? `https://www.linkedin.com/in/${encodeURIComponent(vanityName)}`
+            : null;
+    }
+
+    if (type === ChannelTypeEnum.TWITTER && handle && !/\s/.test(handle)) {
+        return `https://x.com/${encodeURIComponent(handle)}`;
+    }
+
+    return null;
+}
+
 async function requestToken(type: ChannelTypeEnum, body: URLSearchParams) {
     const config = getConfig(type);
     const headers: Record<string, string> = {
@@ -158,11 +193,10 @@ function createProvider(
                 null;
 
             const handle =
-                profileData?.username ??
-                profileData?.screen_name ??
-                profileData?.handle ??
-                profileData?.name ??
-                null;
+                normalizeHandle(profileData?.username) ??
+                normalizeHandle(profileData?.screen_name) ??
+                normalizeHandle(profileData?.handle) ??
+                normalizeString(profileData?.name);
 
             const profileImage =
                 profileData?.thread_profile_picture ??
@@ -173,6 +207,7 @@ function createProvider(
                 profileData?.picture?.url ??
                 profileData?.picture ??
                 null;
+            const profileUrl = buildProfileUrl(type, profileData, handle);
 
             console.log(providerAccountId, handle, "providerAccountId");
 
@@ -180,6 +215,7 @@ function createProvider(
                 providerAccountId,
                 handle,
                 profileImage,
+                profileUrl,
             };
         },
     };

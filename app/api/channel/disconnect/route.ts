@@ -30,6 +30,10 @@ export async function POST(request: NextRequest) {
         const { error: updateError } = await insforge.database
             .from("user_channels")
             .update({
+                provider_account_id: null,
+                handle: null,
+                profile_image: null,
+                profile_url: null,
                 access_token: null,
                 refresh_token: null,
                 token_expires_at: null,

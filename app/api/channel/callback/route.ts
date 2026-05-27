@@ -84,6 +84,7 @@ export async function GET(request: NextRequest) {
             provider_account_id: profile.providerAccountId ?? null,
             handle: profile.handle ?? null,
             profile_image: profile.profileImage ?? null,
+            profile_url: profile.profileUrl ?? null,
             access_token: encrypt(token.accessToken),
             refresh_token: encrypt(token.refreshToken ?? null),
             token_expires_at: token.expiresAt ?? null,

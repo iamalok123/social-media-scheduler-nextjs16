@@ -33,7 +33,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ChannelType } from "@/types/channel.type";
 import { PlusSignIcon } from "@hugeicons/core-free-icons";
-import { getChannelIcon, getChannelUrl } from "@/constants/channels";
+import { ChannelTypeEnum, getChannelIcon, getChannelUrl } from "@/constants/channels";
 import ChannelAvatar from "@/components/channel-avatar";
 import { UserButton } from "@clerk/nextjs";
 import { toast } from "sonner";
@@ -51,6 +51,23 @@ const mainNav = [
 const subscribeToClientReady = () => () => {};
 const getClientSnapshot = () => true;
 const getServerSnapshot = () => false;
+
+function getChannelProfileHref(channel: ChannelType) {
+    if (channel.profile_url) return channel.profile_url;
+
+    const baseUrl = getChannelUrl(channel.type);
+    const handle = channel.handle?.replace(/^@/, "").trim();
+
+    if (
+        channel.type === ChannelTypeEnum.TWITTER &&
+        handle &&
+        !/\s/.test(handle)
+    ) {
+        return `${baseUrl}/${encodeURIComponent(handle)}`;
+    }
+
+    return baseUrl;
+}
 
 const AppSidebar = () => {
     const pathname = usePathname();
@@ -185,9 +202,8 @@ const AppSidebar = () => {
                                     ) : (
                                         connectedChannels?.map(
                                             (channel: ChannelType) => {
-                                                const url = getChannelUrl(
-                                                    channel.type,
-                                                );
+                                                const url =
+                                                    getChannelProfileHref(channel);
                                                 return (
                                                     <SidebarMenuItem
                                                         key={channel.id}
@@ -196,7 +212,7 @@ const AppSidebar = () => {
                                                             asChild
                                                         >
                                                             <a
-                                                                href={`${url}/${channel.handle}`}
+                                                                href={url}
                                                                 target="_blank"
                                                                 rel="noreferrer"
                                                                 className="w-full! relative block items-center gap-2"
