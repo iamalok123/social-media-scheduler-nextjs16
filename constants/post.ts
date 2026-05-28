@@ -1,8 +1,8 @@
 export const POST_STATUS = {
-  DRAFT: "draft",
-  QUEUE: "queue",
-  PUBLISHED: "published",
-  FAILED: "failed",
+    DRAFT: "draft",
+    QUEUE: "queue",
+    PUBLISHED: "published",
+    FAILED: "failed",
 } as const;
 
 export type PostStatus = (typeof POST_STATUS)[keyof typeof POST_STATUS];

@@ -12,8 +12,7 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // const canUseAI = has({ plan: "pro" }) || has({ plan: "premium" });
-        const canUseAI = true; // --- IGNORE ---
+        const canUseAI = has({ plan: "pro" }) || has({ plan: "premium" });
         if (!canUseAI) {
             return NextResponse.json(
                 { error: "AI Idea generation requires Pro or Premium plan" },
