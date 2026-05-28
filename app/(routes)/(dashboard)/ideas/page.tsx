@@ -1,9 +1,7 @@
-import React from 'react'
+import IdeaKanban from "@/components/idea/idea-kanban";
 
-const IdeaPage = () => {
-  return (
-    <div>IdeasPage</div>
-  )
-}
+const IdeasPage = () => {
+    return <IdeaKanban />;
+};
 
-export default IdeaPage
+export default IdeasPage;
