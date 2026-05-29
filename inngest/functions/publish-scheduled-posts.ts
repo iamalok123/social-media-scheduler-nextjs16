@@ -5,6 +5,8 @@ import { decrypt, encrypt } from "@/lib/encryption";
 import { refreshOauthToken } from "@/lib/social-oauth";
 import { ChannelTypeEnum } from "@/constants/channels";
 
+type Logger = { info: (...args: unknown[]) => void; error: (...args: unknown[]) => void };
+
 type DuePost = {
     id: string;
 };
@@ -172,6 +174,49 @@ export const publishScheduledPost = inngest.createFunction(
                         logger,
                     });
                 }
+                if (providerType === ChannelTypeEnum.FACEBOOK) {
+                    return publishToFacebook({
+                        accessToken: currentAccessToken,
+                        content: post.content,
+                        providerAccountId: post.user_channels?.provider_account_id,
+                        images: post.images,
+                        logger,
+                    });
+                }
+                if (providerType === ChannelTypeEnum.INSTAGRAM) {
+                    return publishToInstagram({
+                        accessToken: currentAccessToken,
+                        content: post.content,
+                        providerAccountId: post.user_channels?.provider_account_id,
+                        images: post.images,
+                        logger,
+                    });
+                }
+                if (providerType === ChannelTypeEnum.THREADS) {
+                    return publishToThreads({
+                        accessToken: currentAccessToken,
+                        content: post.content,
+                        providerAccountId: post.user_channels?.provider_account_id,
+                        images: post.images,
+                        logger,
+                    });
+                }
+                if (providerType === ChannelTypeEnum.YOUTUBE) {
+                    return publishToYouTube({
+                        accessToken: currentAccessToken,
+                        content: post.content,
+                        images: post.images,
+                        logger,
+                    });
+                }
+                if (providerType === ChannelTypeEnum.TIKTOK) {
+                    return publishToTikTok({
+                        accessToken: currentAccessToken,
+                        content: post.content,
+                        images: post.images,
+                        logger,
+                    });
+                }
 
                 throw new Error(`Unsupported provider type: ${providerType}`);
             });
@@ -202,7 +247,7 @@ async function publishToTwitter({
     content: string;
     handle?: string | null;
     images?: ImageObject[];
-    logger: any;
+    logger: Logger;
 }) {
     const mediaIds = images?.length
         ? await uploadImagesToTwitter({
@@ -233,6 +278,7 @@ async function publishToTwitter({
     if (!response.ok) throw new Error("Failed to publish to Twitter");
 
     const responseText = await response.text();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let data: any = null;
     try {
         data = JSON.parse(responseText);
@@ -258,7 +304,7 @@ async function uploadImagesToTwitter({
 }: {
     accessToken: string;
     images: ImageObject[];
-    logger: any;
+    logger: Logger;
 }) {
     const mediaIds: string[] = [];
 
@@ -301,10 +347,11 @@ async function uploadImagesToTwitter({
 
         const response = await uploadRes.text();
         logger.info("Twitter media upload response", { response });
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         let data: any = null;
         try {
             data = JSON.parse(response);
-        } catch (e) {
+        } catch (_e) {
             logger.error("Failed to parse Twitter media upload response", {
                 response,
             });
@@ -334,7 +381,7 @@ async function publishToLinkedIn({
     text: string;
     authorId?: string | null;
     images?: { url: string; key: string }[];
-    logger: any;
+    logger: Logger;
 }) {
     if (!authorId) throw new Error("Missing LinkedIn provider account id.");
     const imageUrn = images?.[0]?.url
@@ -376,6 +423,7 @@ async function publishToLinkedIn({
     });
 
     const responseText = await response.text();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let data: any = null;
     try {
         data = responseText ? JSON.parse(responseText) : null;
@@ -523,4 +571,121 @@ function formatLinkedInText(text: string): string {
             .trim()
             .slice(0, 3000)
     );
+}
+
+
+// ---------------------------------------------------------------------------
+// NEW PUBLISHERS SKELETONS
+// Replace these with actual API calls in the future based on API docs.
+// ---------------------------------------------------------------------------
+
+async function publishToFacebook({
+    accessToken: _accessToken,
+    content: _content,
+    providerAccountId,
+    images: _images,
+    logger,
+}: {
+    accessToken: string;
+    content: string;
+    providerAccountId?: string | null;
+    images?: ImageObject[];
+    logger: Logger;
+}) {
+    if (!providerAccountId) throw new Error("Missing Facebook Page/Profile ID");
+    
+    // Facebook Graph API logic here
+    // e.g., POST https://graph.facebook.com/v19.0/${providerAccountId}/feed
+    
+    logger.info("Facebook publish invoked", { providerAccountId });
+    return `https://facebook.com/${providerAccountId}`;
+}
+
+async function publishToInstagram({
+    accessToken: _accessToken,
+    content: _content,
+    providerAccountId,
+    images,
+    logger,
+}: {
+    accessToken: string;
+    content: string;
+    providerAccountId?: string | null;
+    images?: ImageObject[];
+    logger: Logger;
+}) {
+    if (!providerAccountId) throw new Error("Missing Instagram Account ID");
+    if (!images || images.length === 0) throw new Error("Instagram requires media (image/video).");
+    
+    // Instagram Graph API logic here (Requires Instagram Professional Account linked to a FB Page)
+    // 1. Create Media Container: POST /v19.0/{ig-user-id}/media
+    // 2. Publish Container: POST /v19.0/{ig-user-id}/media_publish
+    
+    logger.info("Instagram publish invoked", { providerAccountId });
+    return `https://instagram.com/`;
+}
+
+async function publishToThreads({
+    accessToken: _accessToken,
+    content: _content,
+    providerAccountId,
+    images: _images,
+    logger,
+}: {
+    accessToken: string;
+    content: string;
+    providerAccountId?: string | null;
+    images?: ImageObject[];
+    logger: Logger;
+}) {
+    if (!providerAccountId) throw new Error("Missing Threads Account ID");
+    
+    // Threads API logic here
+    // 1. Create Media Container: POST https://graph.threads.net/v1.0/me/threads
+    // 2. Publish Container: POST https://graph.threads.net/v1.0/me/threads_publish
+    
+    logger.info("Threads publish invoked", { providerAccountId });
+    return `https://threads.net/`;
+}
+
+async function publishToYouTube({
+    accessToken: _accessToken,
+    content: _content,
+    images,
+    logger,
+}: {
+    accessToken: string;
+    content: string;
+    images?: ImageObject[];
+    logger: Logger;
+}) {
+    const video = images?.find((m) => m.type === "video");
+    if (!video) throw new Error("YouTube requires a video file.");
+    
+    // YouTube Data API logic here
+    // POST https://www.googleapis.com/upload/youtube/v3/videos
+    
+    logger.info("YouTube publish invoked");
+    return `https://youtube.com/`;
+}
+
+async function publishToTikTok({
+    accessToken: _accessToken,
+    content: _content,
+    images,
+    logger,
+}: {
+    accessToken: string;
+    content: string;
+    images?: ImageObject[];
+    logger: Logger;
+}) {
+    const video = images?.find((m) => m.type === "video");
+    if (!video) throw new Error("TikTok requires a video file.");
+    
+    // TikTok Content Posting API logic here
+    // POST https://open.tiktokapis.com/v2/post/publish/video/init/
+    
+    logger.info("TikTok publish invoked");
+    return `https://tiktok.com/`;
 }

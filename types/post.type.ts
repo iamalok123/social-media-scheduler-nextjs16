@@ -3,6 +3,7 @@ import {ChannelType} from "./channel.type";
 export type ImageObject = {
     url: string;
     key: string;
+    type?: "image" | "video";
 };
 
 export type PostType = {

@@ -23,7 +23,6 @@ const platformBadges = [
   { type: ChannelTypeEnum.YOUTUBE, color: "#FF0000", className: "left-[2%]  top-[56%]" },
 
   // Right column — stacked vertically, stays in right ~15% of the container  
-  { type: ChannelTypeEnum.BLUESKY, color: "#1285fe", className: "right-[2%] top-[8%]" },
   { type: ChannelTypeEnum.INSTAGRAM, color: "#E4405F", className: "right-[6%] top-[32%]" },
   { type: ChannelTypeEnum.THREADS, color: "#000000", className: "right-[2%] top-[56%]" },
   { type: ChannelTypeEnum.FACEBOOK, color: "#1877F2", className: "right-[9%] top-[56%]" },

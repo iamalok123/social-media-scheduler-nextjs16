@@ -2,7 +2,6 @@ import { ChannelType } from "@/types/channel.type";
 import { TwitterPreview } from "./twitter-preview";
 import { FacebookPreview } from "./facebook-preview";
 import { InstagramPreview } from "./instagram-preview";
-import { BlueSkyPreview } from "./bluesky-preview";
 import { InfoIcon } from "lucide-react";
 import { ThreadPreview } from "./thread-preview";
 import { LinkedinPreview } from "./linkedin-preview";
@@ -62,10 +61,6 @@ const PreviewPanel = ({
             case ChannelTypeEnum.FACEBOOK:
                 return (
                     <FacebookPreview text={content.text} images={imageUrls} />
-                );
-            case ChannelTypeEnum.BLUESKY:
-                return (
-                    <BlueSkyPreview text={content.text} images={imageUrls} />
                 );
             case ChannelTypeEnum.YOUTUBE:
                 return (

@@ -6,7 +6,6 @@ import {
   ThreadsIcon,
   YoutubeIcon,
   LinkedinIcon,
-  BlueskyIcon,
 } from "@hugeicons/core-free-icons";
 import type { IconSvgElement } from "@hugeicons/react";
 
@@ -16,7 +15,6 @@ export enum ChannelTypeEnum {
   THREADS = "THREADS",
   FACEBOOK = "FACEBOOK",
   LINKEDIN = "LINKEDIN",
-  BLUESKY = "BLUESKY",
   YOUTUBE = "YOUTUBE",
   TIKTOK = "TIKTOK",
 }
@@ -27,7 +25,6 @@ export const CHANNEL_TYPE_ICONS: Record<ChannelTypeEnum, IconSvgElement> = {
   [ChannelTypeEnum.INSTAGRAM]: InstagramIcon,
   [ChannelTypeEnum.THREADS]: ThreadsIcon,
   [ChannelTypeEnum.FACEBOOK]: FacebookIcon,
-  [ChannelTypeEnum.BLUESKY]: BlueskyIcon,
   [ChannelTypeEnum.YOUTUBE]: YoutubeIcon,
   [ChannelTypeEnum.TIKTOK]: TiktokIcon,
 };
@@ -38,7 +35,6 @@ export const CHANNEL_TYPE_URLS: Record<ChannelTypeEnum, string> = {
   [ChannelTypeEnum.INSTAGRAM]: "https://instagram.com",
   [ChannelTypeEnum.THREADS]: "https://threads.com",
   [ChannelTypeEnum.FACEBOOK]: "https://facebook.com",
-  [ChannelTypeEnum.BLUESKY]: "https://bluesky.com",
   [ChannelTypeEnum.YOUTUBE]: "https://youtube.com",
   [ChannelTypeEnum.TIKTOK]: "https://tiktok.com",
 };

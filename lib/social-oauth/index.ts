@@ -229,7 +229,6 @@ const PROVIDERS: Record<ChannelTypeEnum, OAuthProvider> = {
     [ChannelTypeEnum.INSTAGRAM]: createProvider(ChannelTypeEnum.INSTAGRAM),
     [ChannelTypeEnum.FACEBOOK]: createProvider(ChannelTypeEnum.FACEBOOK),
     [ChannelTypeEnum.THREADS]: createProvider(ChannelTypeEnum.THREADS),
-    [ChannelTypeEnum.BLUESKY]: createProvider(ChannelTypeEnum.BLUESKY),
     [ChannelTypeEnum.YOUTUBE]: createProvider(ChannelTypeEnum.YOUTUBE),
     [ChannelTypeEnum.TIKTOK]: createProvider(ChannelTypeEnum.TIKTOK),
 };
