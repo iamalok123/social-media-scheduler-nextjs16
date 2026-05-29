@@ -118,3 +118,5 @@ drop policy if exists scheduled_posts_policy on scheduled_posts;
 create policy scheduled_posts_policy on scheduled_posts
   for all using (user_id = requesting_user_id())
   with check (user_id = requesting_user_id());
+
+

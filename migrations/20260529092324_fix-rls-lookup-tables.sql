@@ -10,6 +10,7 @@
 ALTER TABLE public.channel_types ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.channel_types FORCE ROW LEVEL SECURITY;
 
+
 DROP POLICY IF EXISTS "channel_types_public_read"        ON public.channel_types;
 DROP POLICY IF EXISTS "channel_types_authenticated_read" ON public.channel_types;
 

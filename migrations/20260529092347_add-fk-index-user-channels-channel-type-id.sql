@@ -9,3 +9,4 @@
 
 CREATE INDEX IF NOT EXISTS idx_user_channels_channel_type_id
   ON public.user_channels (channel_type_id);
+

@@ -105,6 +105,7 @@ export default function LandingPage() {
       </div>
     </header>
 
+
     <main>
       <section className="relative overflow-hidden">
         <div className="pointer-events-none absolute inset-0 opacity-40 dark:opacity-20 bg-[linear-gradient(to_right,rgba(15,23,42,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(15,23,42,0.06)_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,rgba(248,250,252,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(248,250,252,0.08)_1px,transparent_1px)] bg-size-[56px_56px]" />
