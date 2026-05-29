@@ -54,7 +54,7 @@ const SettingsPage = () => {
                                 <CardHeader>
                                     <CardTitle>Your Profile</CardTitle>
                                     <CardDescription>
-                                        Managr youe account information
+                                        Manage your account information
                                     </CardDescription>
                                 </CardHeader>
                                 <CardContent>
@@ -109,7 +109,7 @@ const SettingsPage = () => {
                                 <CardHeader>
                                     <CardTitle>Appearance</CardTitle>
                                     <CardDescription>
-                                        Customize how Lemon AI looks for you
+                                        Customize how the app looks for you
                                     </CardDescription>
                                 </CardHeader>
                                 <CardContent className="space-y-6">

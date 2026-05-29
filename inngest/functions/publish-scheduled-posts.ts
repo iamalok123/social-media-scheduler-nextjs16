@@ -166,7 +166,7 @@ export const publishScheduledPost = inngest.createFunction(
                 if (providerType === ChannelTypeEnum.LINKEDIN) {
                     return publishToLinkedIn({
                         accessToken: currentAccessToken,
-                        text: post.content,
+                        text: formatLinkedInText(post.content),
                         authorId: post.user_channels?.provider_account_id,
                         images: post.images,
                         logger,

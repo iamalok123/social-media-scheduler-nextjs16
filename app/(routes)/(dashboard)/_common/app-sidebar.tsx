@@ -1,5 +1,7 @@
 "use client";
 
+import React from "react";
+
 import { useSyncExternalStore } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -37,7 +39,7 @@ import { ChannelTypeEnum, getChannelIcon, getChannelUrl } from "@/constants/chan
 import ChannelAvatar from "@/components/channel-avatar";
 import { UserButton } from "@clerk/nextjs";
 import { toast } from "sonner";
-// import CreatePostDialog from "@/components/schedule/create-post-dialog";
+import CreatePostDialog from "@/components/schedule/create-post-dialog";
 
 
 
@@ -78,6 +80,7 @@ const AppSidebar = () => {
         getClientSnapshot,
         getServerSnapshot,
     );
+    const [isCreatePostOpen, setIsCreatePostOpen] = React.useState(false);
 
 
     const connectMutation = useMutation({
@@ -155,6 +158,7 @@ const AppSidebar = () => {
                                 : "w-full",
                         )}
                         size={isCollapsed ? "icon" : "lg"}
+                        onClick={() => setIsCreatePostOpen(true)}
                     >
                         <Plus className="size-4" />
                         {!isCollapsed && <span>New Post</span>}
@@ -372,10 +376,14 @@ const AppSidebar = () => {
                         {/* <span className="text-sm">
                             {user?.fullName ||
                                 user?.primaryEmailAddress?.emailAddress}
-                        </span> */}
+                        </span> */}  
                     </div>
                 </SidebarFooter>
             </Sidebar>
+            <CreatePostDialog
+                open={isCreatePostOpen}
+                onOpenChange={setIsCreatePostOpen}
+            />
         </>
     );
 };

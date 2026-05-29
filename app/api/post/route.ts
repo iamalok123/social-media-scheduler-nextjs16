@@ -243,10 +243,12 @@ async function checkCreatePostLimit(
     insforge: Awaited<ReturnType<typeof getInsforgeServerClient>>["insforge"],
     userId: string,
 ) {
+    // BUG 3 FIX: Only count active (draft/queue) posts, not all-time published/failed posts
     const { count, error } = await insforge.database
         .from("scheduled_posts")
         .select("id", { count: "exact", head: true })
-        .eq("user_id", userId);
+        .eq("user_id", userId)
+        .in("status", ["draft", "queue"]);
 
     if (error) {
         throw error;
