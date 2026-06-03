@@ -1,4 +1,4 @@
-# Social AI - your one step solution to grow followers on internet
+# Social AI - your one step solution to grow on internet
 
 ![Project Dashboard](./public/project_dashboard.png)
 
