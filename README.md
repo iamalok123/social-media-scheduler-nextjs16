@@ -1,4 +1,4 @@
-# Social Media Scheduler
+# Social AI - your one step solution to grow followers on internet
 
 ![Project Dashboard](./public/project_dashboard.png)
 
@@ -82,7 +82,7 @@ INNGEST_SIGNING_KEY="local"
 # Application Settings
 SOCIAL_OAUTH_REDIRECT="https://your-ngrok-url.ngrok.app/api/channel/callback"
 NEXT_PUBLIC_APP_URL="http://localhost:3000"
-NEXT_PUBLIC_BRAND_NAME="Social Media Scheduler"
+NEXT_PUBLIC_BRAND_NAME="Social AI"
 ```
 
 ### 4. Database Migrations
